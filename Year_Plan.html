@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff-to-Founder · 2-Year Tracked Plan</title>
+<style>
+  :root{
+    --ink:#13131a; --paper:#f3efe6; --line:#d9d2c4;
+    --accent:#c2410c; --accent2:#0f766e; --muted:#6b6457;
+    --card:#fbf9f3; --done:#0f766e; --shadow:0 1px 0 #e8e2d4;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"Inter","Helvetica Neue",Arial,system-ui,sans-serif;
+    --mono:"SF Mono","Cascadia Code",ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased;padding:0 0 120px}
+  .wrap{max-width:920px;margin:0 auto;padding:0 22px}
+
+  /* HERO */
+  header.hero{padding:64px 0 40px;border-bottom:2px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:18px}
+  h1{font-family:var(--serif);font-size:clamp(34px,6vw,58px);line-height:1.02;font-weight:600;
+    letter-spacing:-.01em;margin-bottom:18px}
+  h1 em{font-style:italic;color:var(--accent2)}
+  .sub{font-size:16px;max-width:62ch;color:var(--muted)}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:26px;font-family:var(--mono);
+    font-size:12px;letter-spacing:.04em;color:var(--ink)}
+  .meta b{color:var(--accent2)}
+
+  /* PROGRESS BAR */
+  .overall{margin:30px 0 0;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:18px 20px}
+  .overall .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .overall .row span:first-child{font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted)}
+  .overall .row span:last-child{font-family:var(--serif);font-size:22px;color:var(--accent2)}
+  .track{height:9px;background:#e6dfd0;border-radius:6px;overflow:hidden}
+  .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));
+    width:0;transition:width .5s ease}
+
+  /* SECTION SHELL */
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  .seclabel{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:8px}
+  h2{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+  .lead{color:var(--muted);max-width:64ch;margin-bottom:8px}
+
+  /* YEAR DIVIDER */
+  .yeardiv{padding:38px 0 8px}
+  .yeardiv h2{font-size:40px}
+  .yeardiv .lead{font-size:15px}
+  .yeartag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;background:var(--ink);color:var(--paper);padding:4px 11px;
+    border-radius:20px;margin-bottom:14px}
+
+  /* QUARTER CARD */
+  .q{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    margin-top:22px;overflow:hidden;box-shadow:var(--shadow)}
+  .qhead{display:flex;align-items:flex-start;gap:16px;padding:22px 24px;cursor:pointer;
+    user-select:none;transition:background .15s}
+  .qhead:hover{background:#f6f2e8}
+  .qnum{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--accent);
+    line-height:1;min-width:64px}
+  .qnum small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+    color:var(--muted);margin-top:5px;text-transform:uppercase}
+  .qtitle{flex:1}
+  .qtitle h3{font-family:var(--serif);font-size:21px;font-weight:600;margin-bottom:3px}
+  .qtitle p{font-size:13.5px;color:var(--muted)}
+  .qprog{font-family:var(--mono);font-size:12px;color:var(--accent2);white-space:nowrap;
+    padding-top:6px;min-width:46px;text-align:right}
+  .chev{transition:transform .25s;color:var(--muted);font-size:13px;padding-top:9px}
+  .q.open .chev{transform:rotate(90deg)}
+  .qbody{display:none;padding:0 24px 8px;border-top:1px solid var(--line)}
+  .q.open .qbody{display:block}
+
+  /* TASK GROUPS inside quarter */
+  .group{padding:18px 0;border-bottom:1px dashed var(--line)}
+  .group:last-child{border-bottom:none}
+  .glabel{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px}
+  .pill{display:inline-block;width:9px;height:9px;border-radius:50%}
+  .pill.learn{background:var(--accent2)}
+  .pill.build{background:var(--accent)}
+  .pill.behave{background:#7c3aed}
+  .glabel .gt{color:var(--ink)}
+  .glabel .gn{color:var(--muted);font-weight:400;letter-spacing:.04em;text-transform:none}
+
+  /* TASK ITEM */
+  .task{display:flex;gap:12px;padding:8px 0;align-items:flex-start}
+  .task input{appearance:none;-webkit-appearance:none;width:19px;height:19px;border:1.6px solid #b9b1a0;
+    border-radius:5px;cursor:pointer;flex-shrink:0;margin-top:2px;position:relative;
+    transition:.15s;background:#fff}
+  .task input:checked{background:var(--done);border-color:var(--done)}
+  .task input:checked::after{content:"";position:absolute;left:5.5px;top:2px;width:5px;height:9px;
+    border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .task label{font-size:14.5px;cursor:pointer;transition:.15s}
+  .task input:checked + label{color:var(--muted);text-decoration:line-through;
+    text-decoration-color:#c6bfaf}
+  .task label .res{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .task label .res a{color:var(--accent2);text-decoration:none;border-bottom:1px solid #bcd}
+  .task label .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    background:#ece6d8;color:var(--muted);padding:2px 6px;border-radius:4px;margin-left:7px;
+    vertical-align:1px}
+
+  /* CALLOUT */
+  .note{background:#fff;border-left:3px solid var(--accent2);padding:14px 18px;margin-top:16px;
+    border-radius:0 8px 8px 0;font-size:13.5px;color:#403a30}
+  .note b{color:var(--accent2)}
+
+  /* HABITS / always-on cards */
+  .habitgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  .habit{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .habit h4{font-family:var(--serif);font-size:18px;margin-bottom:6px}
+  .habit p{font-size:13.5px;color:var(--muted)}
+  .habit .src{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--accent);
+    margin-top:9px;text-transform:uppercase}
+
+  /* mindset list */
+  .mind{margin-top:18px}
+  .mind .m{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .mind .m:last-child{border-bottom:none}
+  .mind .mn{font-family:var(--serif);font-size:24px;color:var(--accent);min-width:40px;line-height:1}
+  .mind .mt h4{font-family:var(--serif);font-size:17px;margin-bottom:3px}
+  .mind .mt p{font-size:13.5px;color:var(--muted)}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);
+    font-size:11px;letter-spacing:.05em;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:7px}
+
+  .resetbar{margin-top:40px;text-align:center}
+  .resetbar button{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    background:none;border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:6px;
+    cursor:pointer}
+  .resetbar button:hover{border-color:var(--accent);color:var(--accent)}
+  .saveflash{font-family:var(--mono);font-size:11px;color:var(--accent2);margin-left:12px;opacity:0;
+    transition:opacity .3s}
+
+  footer{padding:40px 0 0;font-size:12px;color:var(--muted);font-family:var(--mono);
+    letter-spacing:.03em;text-align:center}
+
+  @media(max-width:640px){
+    .habitgrid{grid-template-columns:1fr}
+    .qnum{min-width:48px;font-size:24px}
+    .qhead{padding:18px 16px;gap:12px}
+    .qbody{padding:0 16px 8px}
+    h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Aug 2026 → Jul 2028 · Operating Plan</div>
+    <h1>From senior engineer to <em>technical founder</em>, in eight quarters.</h1>
+    <p class="sub">Backend / distributed-systems depth first, founder breadth layered on top. Every quarter pairs a learning track with a real build milestone on <b>Sangam</b> — your iPaaS — so the curriculum is never abstract. Behaviors that actually drive the staff-level jump are woven in, not bolted on.</p>
+    <div class="meta">
+      <span>Cadence&nbsp; <b>~20 hrs/week</b></span>
+      <span>Spine&nbsp; <b>Sangam (iPaaS)</b></span>
+      <span>North star&nbsp; <b>Found a company</b></span>
+      <span>Progress saved&nbsp; <b>on this device</b></span>
+    </div>
+
+    <div class="overall">
+      <div class="row"><span>Overall completion</span><span id="pct">0%</span></div>
+      <div class="track"><i id="bar"></i></div>
+    </div>
+
+    <div class="legend">
+      <span><i class="pill learn"></i> Learn — depth &amp; theory</span>
+      <span><i class="pill build"></i> Build — Sangam milestone</span>
+      <span><i class="pill behave"></i> Behave — staff/founder habit</span>
+    </div>
+  </header>
+
+  <!-- HOW TO USE -->
+  <section>
+    <div class="seclabel">How this is built</div>
+    <h2>The logic, in one breath</h2>
+    <p class="lead">Sangam is the rare side project that touches almost the entire distributed-systems syllabus: connectors (API design, retries, idempotency), Flows (scheduling, event-driven architecture, queues), typed Actions (type systems, validation), multi-tenancy + IAM/RBAC (auth, isolation, data modeling), per-flow logs (observability), and an AI assistant (applied LLM/RAG). So instead of learning theory and building separately, each quarter you <b>learn the concept, then ship the part of Sangam that forces you to use it.</b> That's the fastest path to depth — and it produces a real product you can put users on, which is the founder half of your goal.</p>
+    <div class="note"><b>One honest constraint:</b> "good depth in all domains" in 2 years isn't real. This plan makes you <b>deep</b> in distributed systems (your edge), <b>functional</b> in applied AI, frontend, and product, and <b>literate</b> in business. Founders win by knowing one thing cold and enough about the rest to make good calls and hire well.</p>
+  </section>
+
+  <!-- ============ YEAR 1 ============ -->
+  <div class="yeardiv">
+    <span class="yeartag">Year 1 · Aug 2026 – Jul 2027</span>
+    <h2>Technical depth — become hard to replace</h2>
+    <p class="lead">Goal by Jul 2027: you can design and reason about a non-trivial distributed system from first principles, debug production a layer below your peers, and Sangam runs real Flows end-to-end.</p>
+  </div>
+
+  <div id="quarters"></div>
+
+  <!-- ============ MINDSET ============ -->
+  <section>
+    <div class="seclabel">From people who made the jump</div>
+    <h2>Five mentality shifts to run continuously</h2>
+    <p class="lead">These aren't quarterly tasks — they're lenses to apply to every piece of work, all eight quarters. Drawn from staff engineers at Pinterest, Nubank, and the <i>Staff Engineer</i> / <i>Staff Engineer's Path</i> literature.</p>
+    <div class="mind">
+      <div class="m"><div class="mn">01</div><div class="mt"><h4>Solve problems, not puzzles</h4><p>The dopamine of cracking a hard bug is not the same as moving a business outcome. Before going deep, ask: whose problem is this, and is it worth solving? Changing the behavior of 1000 engineers beats changing 1000 lines of code — and as a founder, problem-selection <i>is</i> the job.</p></div></div>
+      <div class="m"><div class="mn">02</div><div class="mt"><h4>Build for multiplicative impact</h4><p>The defining staff behavior is work that benefits dozens of others — tooling, standards, removing recurring pain. The trap is staying heads-down on individual output because it feels productive.</p></div></div>
+      <div class="m"><div class="mn">03</div><div class="mt"><h4>Train mindset over collecting skills</h4><p>Depth builds intuition: enough reps that you can predict how a system behaves without a proof-of-concept. You get there by experimenting and collecting fast feedback, not by hoarding tutorials.</p></div></div>
+      <div class="m"><div class="mn">04</div><div class="mt"><h4>Simplicity is the harder craft</h4><p>Anyone can make it complicated. Treat your first solution as a draft, then spend equal time making it simpler — fewer moving parts, fewer files, fewer things to maintain. With a tiny team this is survival, not aesthetics.</p></div></div>
+      <div class="m"><div class="mn">05</div><div class="mt"><h4>Be the engineer everyone wants to work with</h4><p>The durable success metric. It holds whether you're chasing a promotion or recruiting your first cofounder. Reputation compounds; it's the raw material of both.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ============ HABITS ============ -->
+  <section>
+    <div class="seclabel">Always-on</div>
+    <h2>Six habits to install now</h2>
+    <p class="lead">Attach each to an existing routine so it survives busy sprints. Motion (setting a goal) is easy; action (a repeatable trigger) is what compounds.</p>
+    <div class="habitgrid">
+      <div class="habit"><h4>Flag + fix, never just flag</h4><p>"X is slow" gets ignored. "X is slow, here's the data, here's the fix, I'll help" gets action. Reduce friction enough that someone can act on it today.</p><div class="src">drove cross-team impact pre-promotion</div></div>
+      <div class="habit"><h4>Ship in public, weekly</h4><p>A short write-up, a Sangam dev-log, a demo. Opportunities follow people who share useful things. This is also founder credibility being banked early.</p><div class="src">writing finds the holes in your understanding</div></div>
+      <div class="habit"><h4>Define the bar with a sponsor</h4><p>Ask your manager: "If I were promoted in 1–2 years, what would justify it?" Find a sponsor who advocates, not just a mentor who advises.</p><div class="src">calibrate to what's actually rewarded</div></div>
+      <div class="habit"><h4>One design doc a month</h4><p>Write the doc before the code for anything non-trivial in Sangam or at work. A doc a team could execute without you in the room is the staff artifact.</p><div class="src">simplicity + influence in one habit</div></div>
+      <div class="habit"><h4>Talk to a user every 2 weeks</h4><p>Even one. Build empathy for the person on the other side of the screen — at first your "users" are other engineers; later they pay you.</p><div class="src">the most-skipped, highest-leverage habit</div></div>
+      <div class="habit"><h4>Learn by building, not consuming</h4><p>Every book/course must produce something that forces the concept into your hands within a week. Passive learning rots; built knowledge sticks.</p><div class="src">the core speed-with-depth lever</div></div>
+    </div>
+  </section>
+
+  <div class="resetbar">
+    <button id="reset">Reset all progress</button>
+    <span class="saveflash" id="flash">saved ✓</span>
+  </div>
+
+  <footer>
+    Sangam = your iPaaS · Target: working platform (MVP) by mid-2027, paying users by mid-2028 · Plan is a scaffold — bend it as reality teaches you.
+  </footer>
+
+</div>
+
+<script>
+/* ---------- PLAN DATA ---------- */
+const PLAN = [
+  {
+    n:"Q1", span:"2026 · Aug–Oct", title:"Distributed systems foundations",
+    tag:"The bedrock everything else stands on.",
+    groups:[
+      {type:"learn", t:"Learn", n:"theory + first principles", items:[
+        {x:"Read <b>Designing Data-Intensive Applications</b> (Kleppmann) — Ch 1–6. Non-negotiable; the single highest-ROI book for your path.", tag:"book"},
+        {x:"Implement a toy <b>Raft</b> consensus (leader election + log replication) in your language of choice.", tag:"reps"},
+        {x:"Understand consistency models cold: linearizable vs sequential vs eventual; when each is acceptable.", tag:"theory"},
+        {x:"Build a tiny key-value store with a <b>write-ahead log</b>, then add single-leader replication.", tag:"reps"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"foundations + data model", items:[
+        {x:"Lock the <b>multi-tenant data model</b>: tenant isolation strategy (shared-schema + tenant_id vs schema-per-tenant) — write the tradeoff doc.", tag:"design"},
+        {x:"Stand up the core schema: tenants, users, connectors, flows, actions, runs. Migrations from day one.", tag:"code"},
+        {x:"Define the <b>typed Action</b> contract (input/output schemas, validation). This is your type-system rep.", tag:"code"}
+      ]},
+      {type:"behave", t:"Behave", n:"set the foundation", items:[
+        {x:"Have the \"what justifies promotion in 18 months\" conversation with your manager.", tag:"sponsor"},
+        {x:"Start a Sangam dev-log (public repo README or blog). First entry: the architecture you chose and why.", tag:"public"}
+      ]}
+    ]
+  },
+  {
+    n:"Q2", span:"2026 · Nov – 2027 Jan", title:"Systems design + production muscle",
+    tag:"Move from coding components to designing systems.",
+    groups:[
+      {type:"learn", t:"Learn", n:"design + observability", items:[
+        {x:"Finish <b>DDIA</b> Ch 7–12 (transactions, consistency/consensus, batch/stream processing).", tag:"book"},
+        {x:"Study 5 real architectures (engineering blogs: Stripe, Cloudflare, Discord, Figma). Take notes on tradeoffs, not features.", tag:"study"},
+        {x:"Learn observability deeply: distributed tracing, metrics (RED/USE), structured logging, SLOs.", tag:"theory"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"the Flow engine", items:[
+        {x:"Build the <b>Flow execution engine</b>: a Flow = a DAG of typed Actions. Sequential first.", tag:"code"},
+        {x:"Add <b>per-flow structured logs</b> + a run-history view. This is your observability rep made real.", tag:"code"},
+        {x:"Write the <b>design doc</b> for the engine before coding — DAG model, failure semantics, retries. Get a peer to review it.", tag:"design"},
+        {x:"Load-test one Flow path; find the bottleneck; fix it; write up what broke.", tag:"rep"}
+      ]},
+      {type:"behave", t:"Behave", n:"influence starts", items:[
+        {x:"At work: volunteer to own one cross-team design doc.", tag:"scope"},
+        {x:"Publish one write-up: \"How I built a Flow engine\" — your first ship-in-public.", tag:"public"}
+      ]}
+    ]
+  },
+  {
+    n:"Q3", span:"2027 · Feb–Apr", title:"Performance, databases & the OS layer",
+    tag:"Go one level below your daily abstraction.",
+    groups:[
+      {type:"learn", t:"Learn", n:"down the stack", items:[
+        {x:"Postgres internals: query planning, index types, MVCC, locking, connection pooling. Read <b>EXPLAIN ANALYZE</b> fluently.", tag:"theory"},
+        {x:"Linux essentials for debugging: processes, memory, file descriptors, networking, <code>strace</code>/<code>perf</code>.", tag:"theory"},
+        {x:"Learn one profiler deeply and run it on real Sangam code.", tag:"reps"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"scheduling + events + queues", items:[
+        {x:"Add <b>scheduled Flows</b> (cron) and <b>event-triggered Flows</b> (webhooks). Event-driven architecture rep.", tag:"code"},
+        {x:"Introduce a <b>job queue / worker</b> model for async Action execution. Handle <b>idempotency</b> + <b>retries with backoff</b> correctly.", tag:"code"},
+        {x:"Build 3 real connectors (e.g. HTTP, Slack, Postgres). API design + auth handling reps.", tag:"code"},
+        {x:"Profile + tune the DB under concurrent runs; document the wins.", tag:"rep"}
+      ]},
+      {type:"behave", t:"Behave", n:"go deeper than peers", items:[
+        {x:"Debug one production issue at work a layer below where your team usually stops; share the writeup.", tag:"depth"},
+        {x:"Do an informational interview with a recently-promoted staff engineer.", tag:"sponsor"}
+      ]}
+    ]
+  },
+  {
+    n:"Q4", span:"2027 · May–Jul", title:"Depth project + applied AI on-ramp",
+    tag:"Sangam reaches MVP. Begin the AI breadth play.",
+    groups:[
+      {type:"learn", t:"Learn", n:"applied LLM / RAG", items:[
+        {x:"Learn LLM app fundamentals: prompting, function/tool calling, structured output, evals.", tag:"theory"},
+        {x:"RAG end-to-end: chunking, embeddings, vector store, retrieval quality. Build one small RAG.", tag:"reps"},
+        {x:"Read <b>The Mom Test</b> (Fitzpatrick) — short, essential for talking to users.", tag:"book"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"IAM/RBAC + AI assistant v0 + MVP", items:[
+        {x:"Implement <b>IAM/RBAC</b>: roles, permissions, per-tenant authz on every endpoint. Auth + isolation rep.", tag:"code"},
+        {x:"Ship the <b>AI assistant v0</b>: given a plain-English request, it drafts a connector or Flow (tool-calling + your typed schemas).", tag:"code"},
+        {x:"<b>Deploy Sangam end-to-end</b> and run a real multi-step Flow against live services. This is your MVP milestone.", tag:"milestone"},
+        {x:"Write the full architecture doc + a public \"building an iPaaS\" post.", tag:"public"}
+      ]},
+      {type:"behave", t:"Behave", n:"year-1 review", items:[
+        {x:"Get 3 people to actually use Sangam. Watch them. Take notes (don't defend).", tag:"users"},
+        {x:"Self-review vs the promotion bar you set in Q1. Adjust Year 2.", tag:"reflect"}
+      ]}
+    ]
+  },
+
+  /* YEAR 2 marker handled in render */
+  {
+    n:"Q5", span:"2027 · Aug–Oct", title:"Architecture at scale", year2:true,
+    tag:"From 'design a service' to 'design a system of services.'",
+    groups:[
+      {type:"learn", t:"Learn", n:"scale patterns", items:[
+        {x:"Event-driven patterns at scale: sagas, outbox, exactly-once illusions, backpressure.", tag:"theory"},
+        {x:"Data migration & schema evolution strategies with zero downtime.", tag:"theory"},
+        {x:"Cost modeling: learn to reason about $ per request / per tenant.", tag:"founder"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"harden for many tenants", items:[
+        {x:"Make the Flow engine <b>horizontally scalable</b>: stateless workers, durable queue, at-least-once + idempotent Actions.", tag:"code"},
+        {x:"Add <b>rate limiting</b> + per-tenant quotas + fair scheduling so one tenant can't starve others.", tag:"code"},
+        {x:"Add a <b>dead-letter / replay</b> path for failed runs.", tag:"code"},
+        {x:"Write an architecture doc a stranger could execute without you in the room.", tag:"design"}
+      ]},
+      {type:"behave", t:"Behave", n:"simplify", items:[
+        {x:"Pick the gnarliest part of Sangam and rewrite it simpler. Document what you removed.", tag:"craft"}
+      ]}
+    ]
+  },
+  {
+    n:"Q6", span:"2027 · Nov – 2028 Jan", title:"Influence & multiplication",
+    tag:"The actual staff skill — where strong engineers stall.",
+    groups:[
+      {type:"learn", t:"Learn", n:"the literature", items:[
+        {x:"Read <b>The Staff Engineer's Path</b> (Reilly) + <b>An Elegant Puzzle</b> / <b>Staff Engineer</b> (Larson).", tag:"book"},
+        {x:"Learn to write crisp technical proposals (problem → options → recommendation → risks).", tag:"skill"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"developer experience", items:[
+        {x:"Build a <b>connector SDK</b> so others can author connectors without touching the core. Multiplicative-impact rep.", tag:"code"},
+        {x:"Write connector + Flow authoring docs good enough that a stranger ships one.", tag:"public"}
+      ]},
+      {type:"behave", t:"Behave", n:"multiply others", items:[
+        {x:"Mentor one junior engineer at work, on a real project.", tag:"mentor"},
+        {x:"Drive one technical decision across disagreement to consensus; write the doc that did it.", tag:"influence"},
+        {x:"Get into the room where technical direction is set on your team.", tag:"scope"}
+      ]}
+    ]
+  },
+  {
+    n:"Q7", span:"2028 · Feb–Apr", title:"Founder layer — product & users",
+    tag:"The track diverges from pure-IC here.",
+    groups:[
+      {type:"learn", t:"Learn", n:"product sense", items:[
+        {x:"Learn MVP scoping: cut ruthlessly to the one thing users need.", tag:"skill"},
+        {x:"Learn enough frontend/product to ship a clean UI solo (you have the backend).", tag:"breadth"},
+        {x:"Instrument product analytics: define + track activation and retention.", tag:"skill"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"make it a product", items:[
+        {x:"Build a real <b>onboarding flow</b> + a polished Flow-builder UI.", tag:"code"},
+        {x:"Get <b>10 real users</b> (not friends) running Flows. Instrument what they actually do.", tag:"users"},
+        {x:"Run 5 user interviews using Mom-Test technique. Change one thing based on what you hear.", tag:"users"}
+      ]},
+      {type:"behave", t:"Behave", n:"founder muscle", items:[
+        {x:"Ship a visible improvement driven purely by a user complaint — close the loop publicly.", tag:"users"}
+      ]}
+    ]
+  },
+  {
+    n:"Q8", span:"2028 · May–Jul", title:"Founder layer — business & ownership",
+    tag:"Idea → deployed → paying user, solo.",
+    groups:[
+      {type:"learn", t:"Learn", n:"the money", items:[
+        {x:"Learn SaaS unit economics: CAC, LTV, gross margin, what makes a business vs a project.", tag:"founder"},
+        {x:"Learn pricing fundamentals: value-based pricing, tiers, usage metering.", tag:"founder"}
+      ]},
+      {type:"build", t:"Build · Sangam", n:"charge money", items:[
+        {x:"Add <b>usage metering + billing</b> (Stripe). Per-tenant usage you already track makes this natural.", tag:"code"},
+        {x:"Get your <b>first paying user</b> — even $5. The line between project and company.", tag:"milestone"},
+        {x:"Write a one-page business model: who pays, why, how much, what it costs you to serve them.", tag:"founder"}
+      ]},
+      {type:"behave", t:"Behave", n:"decide the path", items:[
+        {x:"Honest 2-year review: depth gained, Sangam traction, energy for founding.", tag:"reflect"},
+        {x:"Decide the next move: push Sangam, find a cofounder, or take staff title first to bank runway. Write the reasoning down.", tag:"decision"}
+      ]}
+    ]
+  }
+];
+
+/* ---------- RENDER ---------- */
+const root = document.getElementById('quarters');
+let TOTAL = 0;
+const KEY = 'sangam_plan_v1';
+let state = {};
+try { const s = localStorage.getItem(KEY); if(s) state = JSON.parse(s); } catch(e){ state = {}; }
+
+let idc = 0;
+PLAN.forEach((q, qi)=>{
+  if(q.year2){
+    const yd = document.createElement('div');
+    yd.className='yeardiv';
+    yd.innerHTML = `<span class="yeartag">Year 2 · Aug 2027 – Jul 2028</span>
+      <h2>Leverage, breadth & founder skills</h2>
+      <p class="lead">Goal by Jul 2028: Sangam has paying users, you operate at staff level on influence and simplicity, and you can take a product from idea to revenue alone.</p>`;
+    root.appendChild(yd);
+  }
+  const card = document.createElement('div');
+  card.className='q'; card.dataset.qi=qi;
+  let total=0;
+  const groupsHtml = q.groups.map(g=>{
+    const items = g.items.map(it=>{
+      const id = 'c'+(idc++); TOTAL++; total++;
+      const checked = state[id] ? 'checked':'';
+      return `<div class="task">
+        <input type="checkbox" id="${id}" ${checked} data-qi="${qi}">
+        <label for="${id}">${it.x}${it.tag?`<span class="tag">${it.tag}</span>`:''}</label>
+      </div>`;
+    }).join('');
+    return `<div class="group">
+      <div class="glabel"><span class="pill ${g.type}"></span><span class="gt">${g.t}</span><span class="gn">— ${g.n}</span></div>
+      ${items}
+    </div>`;
+  }).join('');
+  card.innerHTML = `
+    <div class="qhead">
+      <div class="qnum">${q.n}<small>${q.span}</small></div>
+      <div class="qtitle"><h3>${q.title}</h3><p>${q.tag}</p></div>
+      <div class="qprog" data-prog="${qi}">0/${total}</div>
+      <div class="chev">▶</div>
+    </div>
+    <div class="qbody">${groupsHtml}</div>`;
+  root.appendChild(card);
+});
+
+/* ---------- INTERACTION ---------- */
+const flash = document.getElementById('flash');
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  flash.style.opacity=1; setTimeout(()=>flash.style.opacity=0,900);
+}
+function refresh(){
+  let done=0;
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>{ if(c.checked) done++; });
+  const pct = TOTAL? Math.round(done/TOTAL*100):0;
+  document.getElementById('pct').textContent = pct+'%';
+  document.getElementById('bar').style.width = pct+'%';
+  PLAN.forEach((q,qi)=>{
+    const ins = document.querySelectorAll(`input[data-qi="${qi}"]`);
+    let d=0; ins.forEach(c=>{if(c.checked)d++;});
+    const el = document.querySelector(`[data-prog="${qi}"]`);
+    if(el) el.textContent = `${d}/${ins.length}`;
+  });
+}
+
+document.querySelectorAll('.qhead').forEach(h=>{
+  h.addEventListener('click', ()=> h.parentElement.classList.toggle('open'));
+});
+document.querySelectorAll('input[type=checkbox]').forEach(c=>{
+  c.addEventListener('change', ()=>{
+    state[c.id] = c.checked; if(!c.checked) delete state[c.id];
+    save(); refresh();
+  });
+});
+document.getElementById('reset').addEventListener('click', ()=>{
+  if(!confirm('Clear all checkmarks? This cannot be undone.')) return;
+  state={}; save();
+  document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
+  refresh();
+});
+
+/* open Q1 by default */
+const first = document.querySelector('.q'); if(first) first.classList.add('open');
+refresh();
+</script>
+</body>
+</html>
